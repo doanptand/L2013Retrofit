@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             .toList()
             .subscribe()
 
-        CommentClient.invoke().getPost(10, "id", "desc")
+//        CommentClient.invoke().getPost(10, "id", "desc")
 
 
         //enter queue: FIFO

@@ -3,6 +3,7 @@ package com.ddona.retrofit.network
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -21,8 +22,15 @@ object CommentClient {
         it.proceed(newRequest)
     }
 
-    val okHttp = OkHttpClient.Builder()
+    private fun getLoggingInterceptor(): HttpLoggingInterceptor {
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        return loggingInterceptor
+    }
+
+    private val okHttp = OkHttpClient.Builder()
         .addInterceptor(header)
+        .addInterceptor(getLoggingInterceptor())
         .build()
 
     private val retrofit = Retrofit.Builder()
