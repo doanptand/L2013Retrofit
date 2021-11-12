@@ -9,4 +9,7 @@ interface CommentService {
     @GET("comments")
     fun getAllComment(): Call<List<Comment>>
 
+    @GET("comments")
+    suspend fun getAllCommentWithCoroutines(): List<Comment>
+
 }

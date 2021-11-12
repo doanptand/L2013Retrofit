@@ -18,15 +18,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            val response = CommentClient.invoke().getAllComment().execute()
+//            if (response.isSuccessful) {
+//                val comments = response.body()
+//                comments?.let {
+//                    for (i in 0 until comments.size) {
+//                        Log.d("doanpt", "${comments[i]}")
+//                    }
+//                }
+//            }
+//        }
+
         lifecycleScope.launch(Dispatchers.IO) {
-            val response = CommentClient.invoke().getAllComment().execute()
-            if (response.isSuccessful) {
-                val comments = response.body()
-                comments?.let {
-                    for (i in 0 until comments.size) {
-                        Log.d("doanpt", "${comments[i]}")
-                    }
-                }
+            val comments = CommentClient.invoke().getAllCommentWithCoroutines()
+            for (comment in comments) {
+                Log.d("doanpt", "$comment")
             }
         }
 
