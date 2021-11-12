@@ -6,6 +6,10 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.ddona.retrofit.model.Comment
 import com.ddona.retrofit.network.CommentClient
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -30,12 +34,22 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val comments = CommentClient.invoke().getAllCommentWithCoroutines()
-            for (comment in comments) {
-                Log.d("doanpt", "$comment")
-            }
-        }
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            val comments = CommentClient.invoke().getAllCommentWithCoroutines()
+//            for (comment in comments) {
+//                Log.d("doanpt", "$comment")
+//            }
+//        }
+
+
+        val comments = CommentClient.invoke()
+            .getAllCommentWithRx()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMap { list -> Observable.fromIterable(list) }
+            .filter { it.id % 2 == 0 }
+            .toList()
+            .subscribe()
 
 
         //enter queue: FIFO
